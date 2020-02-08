@@ -9,7 +9,7 @@ namespace SportUp.Data
 {
     public class SportUpContext : DbContext
     {
-        public DbSet<Sport> Sports { get; }
+        
 
         public SportUpContext(DbContextOptions<SportUpContext> options) : base(options)
         {
