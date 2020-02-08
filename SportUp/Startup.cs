@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MySql.Data.MySqlClient;
+using SportUp.Data.Models;
 
 namespace SportUp
 {
@@ -34,10 +35,8 @@ namespace SportUp
 
             services.AddDbContext<ApplicationDbContext>(options => 
                 options.UseMySql(connectionStringBuilder.ConnectionString));
-            services.AddDbContext<SportUpContext>(options =>
-                options.UseMySql(connectionStringBuilder.ConnectionString));
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<SportUpUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddAuthentication().AddGoogle(options =>
             {

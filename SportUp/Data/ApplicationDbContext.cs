@@ -9,7 +9,7 @@ namespace SportUp.Data
 {
     public class ApplicationDbContext : IdentityDbContext<SportUpUser>
     {
-        public DbSet<Sport> Sports { get; }
+        public DbSet<Sport> Sports { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
