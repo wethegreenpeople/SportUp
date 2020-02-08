@@ -31,8 +31,12 @@ namespace SportUp
             var connectionStringBuilder = new MySqlConnectionStringBuilder(Configuration.GetConnectionString("RemoteMysql"));
             connectionStringBuilder.UserID = Configuration["Database:Username"];
             connectionStringBuilder.Password = Configuration["Database:Password"];
+
             services.AddDbContext<ApplicationDbContext>(options => 
                 options.UseMySql(connectionStringBuilder.ConnectionString));
+            services.AddDbContext<SportUpContext>(options =>
+                options.UseMySql(connectionStringBuilder.ConnectionString));
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddAuthentication().AddGoogle(options =>
