@@ -12,6 +12,7 @@ using SportUp.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MySql.Data.MySqlClient;
 
 namespace SportUp
 {
@@ -27,9 +28,11 @@ namespace SportUp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            var connectionStringBuilder = new MySqlConnectionStringBuilder(Configuration.GetConnectionString("RemoteMysql"));
+            connectionStringBuilder.UserID = Configuration["Database:Username"];
+            connectionStringBuilder.Password = Configuration["Database:Password"];
+            services.AddDbContext<ApplicationDbContext>(options => 
+                options.UseMySql(connectionStringBuilder.ConnectionString));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddAuthentication().AddGoogle(options =>
