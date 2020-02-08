@@ -15,5 +15,21 @@ namespace SportUp.Data
             : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<UserSport>()
+            .HasKey(us => new { us.SportId, us.SportUpUserId });
+            builder.Entity<UserSport>()
+                .HasOne(s => s.Sport)
+                .WithMany(u => u.UserSports)
+                .HasForeignKey(s => s.SportId);
+            builder.Entity<UserSport>()
+                .HasOne(s => s.SportUpUser)
+                .WithMany(s => s.UserSports)
+                .HasForeignKey(s => s.SportUpUserId);
+        }
     }
 }

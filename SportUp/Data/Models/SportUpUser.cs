@@ -10,6 +10,6 @@ namespace SportUp.Data.Models
     {
         [PersonalData]
         public string Location { get; set; }
-        public List<Sport> Sports { get; set; }
+        public ICollection<UserSport> UserSports { get; set; }
     }
 }
