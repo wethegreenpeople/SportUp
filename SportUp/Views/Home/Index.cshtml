@@ -1,0 +1,39 @@
+﻿@model IndexViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<form asp-action="AddSport" asp-controller="Home" method="post" name="AddSportsForm">
+    @*<table class="table">
+            <thead>
+                <tr>
+                    <td>Sport</td>
+                    <td>Max Players</td>
+                    <td>Join</td>
+                </tr>
+            </thead>
+
+            @foreach (var sport in Model.AvailableSports)
+            {
+                <tr>
+                    <td>@sport.Name</td>
+                    <td>@sport.MaxPlayers</td>
+                    <td><input  type="checkbox" class="form-check" /></td>
+                </tr>
+            }
+        </table>*@
+
+    <select asp-for="UserEnrolledSports" asp-items="@(new SelectList(Model.AvailableSports, "Id", "Name"))" multiple>
+        <option>Select Items</option>
+    </select>
+
+    <input type="submit" />
+</form>
+
+

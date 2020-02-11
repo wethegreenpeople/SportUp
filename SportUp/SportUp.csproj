@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UserSecretsId>aspnet-SportUp-87F7A7DE-A135-468C-BC83-7C55DBCA0318</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20200208020340_AddSportsToUser.cs" />
+    <Compile Remove="Migrations\20200208020340_AddSportsToUser.Designer.cs" />
+    <Compile Remove="Migrations\20200208020504_MigrationUpdate.cs" />
+    <Compile Remove="Migrations\20200208020504_MigrationUpdate.Designer.cs" />
+    <Compile Remove="Migrations\20200208020655_MigrationUpdate.cs" />
+    <Compile Remove="Migrations\20200208020655_MigrationUpdate.Designer.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.0.0" />
+  </ItemGroup>
+
+</Project>
