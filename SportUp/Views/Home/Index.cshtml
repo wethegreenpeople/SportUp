@@ -1,39 +1,43 @@
-﻿@model IndexViewModel
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<SportUpUser> SignInManager
+
+@model IndexViewModel
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (SignInManager.IsSignedIn(User))
+{
+    <form asp-action="AddSport" asp-controller="Home" method="post" name="AddSportsForm">
+        <select asp-for="SportsToEnrollUserIn" asp-items="@(new SelectList(Model.AvailableSports, "Id", "Name"))" multiple>
+            <option>Select Items</option>
+        </select>
 
-<form asp-action="AddSport" asp-controller="Home" method="post" name="AddSportsForm">
-    @*<table class="table">
+        <input type="submit" />
+    </form>
+
+    if (Model.SportsUserIsEnrolledIn?.Count > 0)
+    {
+        <h4>Sports you're enrolled in</h4>
+        <table>
             <thead>
                 <tr>
-                    <td>Sport</td>
-                    <td>Max Players</td>
-                    <td>Join</td>
+                    <td>Sport Name</td>
                 </tr>
             </thead>
-
-            @foreach (var sport in Model.AvailableSports)
+            @foreach (var item in Model.SportsUserIsEnrolledIn)
             {
                 <tr>
-                    <td>@sport.Name</td>
-                    <td>@sport.MaxPlayers</td>
-                    <td><input  type="checkbox" class="form-check" /></td>
+                    <td>@item.Name</td>
                 </tr>
             }
-        </table>*@
-
-    <select asp-for="UserEnrolledSports" asp-items="@(new SelectList(Model.AvailableSports, "Id", "Name"))" multiple>
-        <option>Select Items</option>
-    </select>
-
-    <input type="submit" />
-</form>
-
-
+        </table>
+    }
+}
+else
+{
+    <div class="text-center">
+        <h2>Log in to start adding sports!</h2>
+    </div>
+}
