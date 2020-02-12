@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SportUp.Data;
 using SportUp.Data.Models;
@@ -26,9 +27,9 @@ namespace SportUp.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var allSports = _context.Sports.ToList();
+            var allSports = await _context.Sports.ToListAsync();
             var viewModel = new IndexViewModel()
             {
                 AvailableSports = allSports,
@@ -37,10 +38,11 @@ namespace SportUp.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddSport(IndexViewModel viewModel)
+        public async Task<IActionResult> AddSport(IndexViewModel viewModel)
         {
-            var selectedSports = _context.Sports.Where(s => viewModel.UserEnrolledSports.Any(us => us == s.Id)).ToList();
-            var userIdentity = _context.Users.SingleOrDefault(s => s.Id == _userManager.GetUserId(this.User));
+            var selectedSports = await _context.Sports.Where(s => viewModel.UserEnrolledSports.Any(us => us == s.Id)).ToListAsync();
+            var userIdentity = await _context.Users.SingleOrDefaultAsync(s => s.Id == _userManager.GetUserId(this.User));
+
             var userSports = new List<UserSport>();
             foreach (var item in selectedSports)
             {
@@ -54,7 +56,7 @@ namespace SportUp.Controllers
             }
             userIdentity.UserSports = userSports;
             _context.Users.Update(userIdentity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }
