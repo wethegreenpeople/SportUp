@@ -24,26 +24,46 @@ namespace SportUp.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var currentUser = await _userManager.GetUserAsync(User);
+            var allSports = await _context.Sports.ToListAsync();
+            var enrolledTeams = await _context.Teams
+                .Include(s => s.UserTeams)
+                .Where(s => s.UserTeams.Any(s => s.SportUpUserId == currentUser.Id))
+                .ToListAsync();
+            var viewModel = new TeamIndexViewModel()
+            {
+                AvailableSports = allSports,
+                CurrentlyEnrolledTeams = enrolledTeams,
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateTeam(TeamIndexViewModel viewModel)
         {
             var currentUser = await _userManager.GetUserAsync(User);
-            viewModel.Team.UserTeams = new List<UserTeam>
+            var selectedSport = await _context.Sports.SingleOrDefaultAsync(s => s.Id == viewModel.TeamSportId);
+
+            var team = new Team()
             {
-                new UserTeam()
+                TeamName = viewModel.TeamName,
+                TeamSportType = selectedSport,
+                UserTeams = new List<UserTeam>
                 {
-                    SportUpUser = currentUser,
+                    new UserTeam()
+                    {
+                        SportUpUser = currentUser,
+                    }
                 }
             };
-            await _context.Teams.AddAsync(viewModel.Team);
+
+            await _context.Teams.AddAsync(team);
             await _context.SaveChangesAsync();
 
-            return View("Index");
+            return RedirectToAction("Index");
         }
     }
 }

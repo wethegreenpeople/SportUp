@@ -16,6 +16,10 @@
     <Compile Remove="Migrations\20200211062317_AddUserTeamJoinTable.Designer.cs" />
     <Compile Remove="Migrations\20200211063048_AddTeamsTable.cs" />
     <Compile Remove="Migrations\20200211063048_AddTeamsTable.Designer.cs" />
+    <Compile Remove="Migrations\20200212042839_AddSportToTeamTable.cs" />
+    <Compile Remove="Migrations\20200212042839_AddSportToTeamTable.Designer.cs" />
+    <Compile Remove="Migrations\20200212043426_AddSportToTeamTable.cs" />
+    <Compile Remove="Migrations\20200212043426_AddSportToTeamTable.Designer.cs" />
   </ItemGroup>
 
 

@@ -7,9 +7,35 @@
 
 <h3>Create Team</h3>
 <form asp-action="CreateTeam" asp-controller="Team" method="post" name="CreateTeamForm">
-    <label asp-for="@Model.Team.TeamName"></label>
-    <input asp-for="@Model.Team.TeamName" />
+    <label asp-for="@Model.TeamName"></label>
+    <input asp-for="@Model.TeamName" />
+
+    <br />
+    <br />
+    <label asp-for="@Model.TeamSportId"></label>
+    <select asp-for="@Model.TeamSportId" asp-items="@(new SelectList(Model.AvailableSports, "Id", "Name"))">
+        <option>Select Sport</option>
+    </select>
 
     <input type="submit" />
 </form>
+
+<h3>Teams you're enrolled in</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <td>Team Name</td>
+            <td>Total Members</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.CurrentlyEnrolledTeams)
+        {
+            <tr>
+                <td>@item.TeamName</td>
+                <td>@item.UserTeams.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>
 

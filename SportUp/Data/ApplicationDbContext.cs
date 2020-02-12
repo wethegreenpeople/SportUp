@@ -44,6 +44,11 @@ namespace SportUp.Data
                 .HasOne(s => s.SportUpUser)
                 .WithMany(s => s.UserTeams)
                 .HasForeignKey(s => s.SportUpUserId);
+
+            // One to many relationship between a team and a sport
+            builder.Entity<Team>()
+                .HasOne(s => s.TeamSportType)
+                .WithMany(s => s.Teams);
         }
     }
 }
