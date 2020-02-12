@@ -18,5 +18,8 @@ namespace SportUp.Models.ViewModels
         public List<Sport> AvailableSports { get; set; }
 
         public List<Team> CurrentlyEnrolledTeams { get; set; }
+
+        [Display(Name = "Team ID")]
+        public int TeamId { get; set; }
     }
 }

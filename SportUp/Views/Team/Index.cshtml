@@ -25,6 +25,7 @@
     <thead>
         <tr>
             <td>Team Name</td>
+            <td>Sport</td>
             <td>Total Members</td>
         </tr>
     </thead>
@@ -33,9 +34,18 @@
         {
             <tr>
                 <td>@item.TeamName</td>
+                <td>@item.TeamSportType.Name</td>
                 <td>@item.UserTeams.Count</td>
             </tr>
         }
     </tbody>
 </table>
+
+<h3>Join a team</h3>
+<form asp-action="JoinTeam" asp-controller="Team" method="post" name="JoinTeamForm">
+    <label asp-for="@Model.TeamId"></label>
+    <input asp-for="@Model.TeamId" type="text" />
+
+    <input type="submit" />
+</form>
 

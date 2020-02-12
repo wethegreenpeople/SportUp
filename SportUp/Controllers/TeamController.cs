@@ -65,5 +65,25 @@ namespace SportUp.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> JoinTeam(int TeamId)
+        {
+            var teamToJoin = await _context.Teams.Include(s => s.UserTeams).SingleOrDefaultAsync(s => s.Id == TeamId);
+            if (teamToJoin == null)
+            {
+                ModelState.AddModelError("Team", "Invalid team");
+                return RedirectToAction("Index");
+            }
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            teamToJoin.UserTeams.Add(new UserTeam()
+            {
+                SportUpUser = currentUser,
+            });
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
     }
 }
