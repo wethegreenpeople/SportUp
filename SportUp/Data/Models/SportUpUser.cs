@@ -11,5 +11,6 @@ namespace SportUp.Data.Models
         [PersonalData]
         public string Location { get; set; }
         public ICollection<UserSport> UserSports { get; set; }
+        public ICollection<UserTeam> UserTeams { get; set; }
     }
 }

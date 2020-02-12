@@ -9,6 +9,7 @@ namespace SportUp.Models.ViewModels
     public class IndexViewModel
     {
         public List<Sport> AvailableSports { get; set; }
-        public List<int> UserEnrolledSports { get; set; }
+        public List<int> SportsToEnrollUserIn { get; set; }
+        public List<Sport> SportsUserIsEnrolledIn { get; set; }
     }
 }
