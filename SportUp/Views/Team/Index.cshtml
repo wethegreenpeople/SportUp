@@ -1,0 +1,15 @@
+﻿@model TeamIndexViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Teams</h1>
+
+<h3>Create Team</h3>
+<form asp-action="CreateTeam" asp-controller="Team" method="post" name="CreateTeamForm">
+    <label asp-for="@Model.Team.TeamName"></label>
+    <input asp-for="@Model.Team.TeamName" />
+
+    <input type="submit" />
+</form>
+
