@@ -34,9 +34,9 @@ namespace SportUp.Controllers
             _signInManager = signInManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            var allSports = _context.Sports.ToList();
+            var allSports = await _context.Sports.ToListAsync();
             var viewModel = new IndexViewModel()
             {
                 AvailableSports = allSports,
@@ -59,10 +59,10 @@ namespace SportUp.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult AddSport(IndexViewModel viewModel)
+        public async Task<IActionResult> AddSportAsync(IndexViewModel viewModel)
         {
-            var selectedSports = _context.Sports.Where(s => viewModel.SportsToEnrollUserIn.Any(us => us == s.Id)).ToList();
-            var userIdentity = _context.Users.Include(s => s.UserSports).SingleOrDefault(s => s.Id == _userManager.GetUserId(this.User));
+            var selectedSports = await _context.Sports.Where(s => viewModel.SportsToEnrollUserIn.Any(us => us == s.Id)).ToListAsync();
+            var userIdentity = await _context.Users.Include(s => s.UserSports).SingleOrDefaultAsync(s => s.Id == _userManager.GetUserId(this.User));
             foreach (var item in selectedSports)
             {
                 if (userIdentity.UserSports.Any(s => s.SportId == item.Id))
@@ -76,7 +76,7 @@ namespace SportUp.Controllers
                 });
             }
             _context.Users.Update(userIdentity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }
