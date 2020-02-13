@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportUp.Data;
 
 namespace SportUp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200211212137_AddUserTeamJoinTable")]
+    partial class AddUserTeamJoinTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,7 +161,6 @@ namespace SportUp.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
@@ -241,15 +242,9 @@ namespace SportUp.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TeamName")
-                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("TeamSportTypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TeamSportTypeId");
 
                     b.ToTable("Teams");
                 });
@@ -331,15 +326,6 @@ namespace SportUp.Migrations
                     b.HasOne("SportUp.Data.Models.SportUpUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("SportUp.Data.Models.Team", b =>
-                {
-                    b.HasOne("SportUp.Data.Models.Sport", "TeamSportType")
-                        .WithMany("Teams")
-                        .HasForeignKey("TeamSportTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
