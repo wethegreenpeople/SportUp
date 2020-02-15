@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SportUp.Data;
 using SportUp.Data.Models;
+using SportUp.Managers;
 using SportUp.Models.ViewModels;
 
 namespace SportUp.Controllers
@@ -16,26 +17,31 @@ namespace SportUp.Controllers
     public class TeamController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<SportUpUser> _userManager;
+        private readonly SportUpUserManager _userManager;
+        private readonly SportManager _sportManager;
+        private readonly TeamManager _teamManager;
 
-        public TeamController(ApplicationDbContext context, UserManager<SportUpUser> userManager)
+        public TeamController(
+            ApplicationDbContext context, 
+            SportUpUserManager userManager,
+            SportManager sportManager,
+            TeamManager teamManager)
         {
             _context = context;
             _userManager = userManager;
+            _sportManager = sportManager;
+            _teamManager = teamManager;
         }
 
         public async Task<IActionResult> Index()
         {
             var currentUser = await _userManager.GetUserAsync(User);
-            var allSports = await _context.Sports.ToListAsync();
-            var enrolledTeams = await _context.Teams
-                .Include(s => s.UserTeams)
-                .Where(s => s.UserTeams.Any(s => s.SportUpUserId == currentUser.Id))
-                .ToListAsync();
+            var allSports = await _sportManager.GetSportsAsync();
+
             var viewModel = new TeamIndexViewModel()
             {
                 AvailableSports = allSports,
-                CurrentlyEnrolledTeams = enrolledTeams,
+                CurrentlyEnrolledTeams = _userManager.GetEnrolledTeams(currentUser),
             };
 
             return View(viewModel);
@@ -45,23 +51,8 @@ namespace SportUp.Controllers
         public async Task<IActionResult> CreateTeam(TeamIndexViewModel viewModel)
         {
             var currentUser = await _userManager.GetUserAsync(User);
-            var selectedSport = await _context.Sports.SingleOrDefaultAsync(s => s.Id == viewModel.TeamSportId);
-
-            var team = new Team()
-            {
-                TeamName = viewModel.TeamName,
-                TeamSportType = selectedSport,
-                UserTeams = new List<UserTeam>
-                {
-                    new UserTeam()
-                    {
-                        SportUpUser = currentUser,
-                    }
-                }
-            };
-
-            await _context.Teams.AddAsync(team);
-            await _context.SaveChangesAsync();
+            var teamSport = await _sportManager.GetSportAsync(viewModel.TeamSportId);
+            await _teamManager.CreateTeamAsync(viewModel.TeamName, currentUser, teamSport);
 
             return RedirectToAction("Index");
         }
@@ -69,7 +60,7 @@ namespace SportUp.Controllers
         [HttpPost]
         public async Task<IActionResult> JoinTeam(int TeamId)
         {
-            var teamToJoin = await _context.Teams.Include(s => s.UserTeams).SingleOrDefaultAsync(s => s.Id == TeamId);
+            var teamToJoin = await _teamManager.GetTeamAsync(TeamId);
             if (teamToJoin == null)
             {
                 ModelState.AddModelError("Team", "Invalid team");
@@ -77,11 +68,7 @@ namespace SportUp.Controllers
             }
             var currentUser = await _userManager.GetUserAsync(User);
 
-            teamToJoin.UserTeams.Add(new UserTeam()
-            {
-                SportUpUser = currentUser,
-            });
-            await _context.SaveChangesAsync();
+            await _userManager.AddTeamToUser(currentUser, teamToJoin);
 
             return RedirectToAction("Index");
         }
