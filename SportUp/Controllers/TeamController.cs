@@ -85,5 +85,17 @@ namespace SportUp.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewTeam(int TeamId)
+        {
+            var team = await _context.Teams
+                .Include(s => s.UserTeams)
+                .ThenInclude(s => s.SportUpUser)
+                .Include(s => s.TeamSportType)
+                .SingleOrDefaultAsync(s => s.Id == TeamId);
+
+            return View("TeamDetails", team);
+        }
     }
 }

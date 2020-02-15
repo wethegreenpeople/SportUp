@@ -27,6 +27,7 @@
             <td>Team Name</td>
             <td>Sport</td>
             <td>Total Members</td>
+            <td>Team Page</td>
         </tr>
     </thead>
     <tbody>
@@ -36,6 +37,7 @@
                 <td>@item.TeamName</td>
                 <td>@item.TeamSportType.Name</td>
                 <td>@item.UserTeams.Count</td>
+                <td><a asp-controller="Team" asp-action="ViewTeam" asp-route-TeamId="@item.Id">View Team Page</a></td>
             </tr>
         }
     </tbody>
