@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SportUp.Data;
 using SportUp.Data.Models;
+using SportUp.Managers;
 using SportUp.Models;
 using SportUp.Models.ViewModels;
 
@@ -19,40 +20,34 @@ namespace SportUp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<SportUpUser> _userManager;
+        private readonly SportUpUserManager _userManager;
         private readonly SignInManager<SportUpUser> _signInManager;
+        private readonly SportManager _sportManager;
 
         public HomeController(
             ILogger<HomeController> logger, 
-            ApplicationDbContext context, 
-            UserManager<SportUpUser> userManager,
-            SignInManager<SportUpUser> signInManager)
+            ApplicationDbContext context,
+            SportUpUserManager userManager,
+            SignInManager<SportUpUser> signInManager,
+            SportManager sportManager)
         {
             _logger = logger;
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _sportManager = sportManager;
         }
 
         public async Task<IActionResult> IndexAsync()
         {
-            var allSports = await _context.Sports.ToListAsync();
             var viewModel = new IndexViewModel()
             {
-                AvailableSports = allSports,
+                AvailableSports = await _sportManager.GetSportsAsync(),
             };
 
+            var user = await _userManager.GetUserAsync(User);
             if (_signInManager.IsSignedIn(User))
-            {
-                var enrolledSports = _context.Users
-                    .Include(s => s.UserSports)
-                    .SingleOrDefault(s => s.Id == _userManager.GetUserId(User))
-                    .UserSports
-                    .Select(s => s.Sport)
-                    .ToList();
-
-                viewModel.SportsUserIsEnrolledIn = enrolledSports;
-            }
+                viewModel.SportsUserIsEnrolledIn = _userManager.GetEnrolledSports(user);
 
             return View(viewModel);
         }
@@ -61,22 +56,8 @@ namespace SportUp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSportAsync(IndexViewModel viewModel)
         {
-            var selectedSports = await _context.Sports.Where(s => viewModel.SportsToEnrollUserIn.Any(us => us == s.Id)).ToListAsync();
-            var userIdentity = await _context.Users.Include(s => s.UserSports).SingleOrDefaultAsync(s => s.Id == _userManager.GetUserId(this.User));
-            foreach (var item in selectedSports)
-            {
-                if (userIdentity.UserSports.Any(s => s.SportId == item.Id))
-                    continue;
-                userIdentity.UserSports.Add(new UserSport()
-                {
-                    SportId = item.Id,
-                    Sport = item,
-                    SportUpUserId = userIdentity.Id,
-                    SportUpUser = userIdentity
-                });
-            }
-            _context.Users.Update(userIdentity);
-            await _context.SaveChangesAsync();
+            var user = await _userManager.GetUserAsync(User);
+            await _userManager.AddSportToUserAsync(user, new Sport());
 
             return RedirectToAction("Index");
         }

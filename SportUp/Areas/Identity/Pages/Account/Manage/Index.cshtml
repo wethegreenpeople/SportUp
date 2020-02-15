@@ -25,6 +25,28 @@
                 <input asp-for="Input.Location" class="form-control" />
                 <span asp-validation-for="Input.Location" class="text-danger"></span>
             </div>
+
+            <select asp-for="Input.SportIdsToEnrollIn" asp-items="@(new SelectList(Model.AvailableSports, "Id", "Name"))" multiple>
+                <option>Select Items</option>
+            </select>
+
+            @if (Model.EnrolledSports?.Count > 0)
+            {
+            <h4>Sports you're enrolled in</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>Sport</td>
+                    </tr>
+                </thead>
+                @foreach (var sport in Model.EnrolledSports)
+                {
+                    <tr>
+                        <td>@sport.Name</td>
+                    </tr>
+                }
+            </table>
+            }
             <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
         </form>
     </div>

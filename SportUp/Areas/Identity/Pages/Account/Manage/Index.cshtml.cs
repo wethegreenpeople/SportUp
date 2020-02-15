@@ -7,23 +7,32 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SportUp.Data.Models;
+using SportUp.Managers;
 
 namespace SportUp.Areas.Identity.Pages.Account.Manage
 {
     public partial class IndexModel : PageModel
     {
-        private readonly UserManager<SportUpUser> _userManager;
+        private readonly SportUpUserManager _userManager;
         private readonly SignInManager<SportUpUser> _signInManager;
+        private readonly SportManager _sportManager;
 
         public IndexModel(
-            UserManager<SportUpUser> userManager,
-            SignInManager<SportUpUser> signInManager)
+            SportUpUserManager userManager,
+            SignInManager<SportUpUser> signInManager,
+            SportManager sportManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _sportManager = sportManager;
         }
 
         public string Username { get; set; }
+
+        public List<Sport> AvailableSports { get; set; }
+
+        [Display(Name = "Currently Enrolled Sports")]
+        public List<Sport> EnrolledSports { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -39,18 +48,24 @@ namespace SportUp.Areas.Identity.Pages.Account.Manage
 
             [Display(Name = "Location")]
             public string Location { get; set; }
+
+            public List<int> SportIdsToEnrollIn { get; set; }
         }
 
         private async Task LoadAsync(SportUpUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var location = user.Location;
 
             Username = userName;
+            AvailableSports = await _sportManager.GetSportsAsync();
+            EnrolledSports = _userManager.GetEnrolledSports(user);
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Location = location,
             };
         }
 
@@ -93,6 +108,9 @@ namespace SportUp.Areas.Identity.Pages.Account.Manage
 
             user.Location = Input.Location;
             await _userManager.UpdateAsync(user);
+
+            var sports = await _sportManager.GetSportsAsync(Input.SportIdsToEnrollIn);
+            await _userManager.AddSportToUserAsync(user, sports);
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
