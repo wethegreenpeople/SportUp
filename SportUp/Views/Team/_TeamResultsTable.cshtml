@@ -1,0 +1,21 @@
+﻿@model List<Team>
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>Team Name</td>
+            <td>Sport</td>
+            <td>Total Members</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var team in Model)
+        {
+            <tr>
+                <td>@team.TeamName</td>
+                <td>@team.TeamSportType.Name</td>
+                <td>@team.UserTeams.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>

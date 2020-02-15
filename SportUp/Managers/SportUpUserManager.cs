@@ -69,5 +69,40 @@ namespace SportUp.Managers
                     .Select(s => s.Sport)
                     .ToList();
         }
+
+        public List<Team> GetEnrolledTeams(SportUpUser user)
+        {
+            return _context.Users
+                .Include(s => s.UserTeams)
+                .ThenInclude(s => s.Team)
+                .SingleOrDefault(s => s.Id == user.Id)
+                .UserTeams
+                .Select(s => s.Team)
+                .ToList();
+        }
+
+        public async Task<SportUpUser> AddTeamToUser(SportUpUser user, Team team)
+        {
+            var userWithTeams = await _context.Users
+               .Include(s => s.UserTeams)
+               .ThenInclude(s => s.Team)
+               .SingleOrDefaultAsync(s => s.Id == user.Id);
+
+            if (userWithTeams.UserTeams?.Any(s => s.TeamId == team.Id) == true)
+                return user;
+
+            userWithTeams.UserTeams.Add(new UserTeam()
+            {
+                TeamId = team.Id,
+                Team = team,
+                SportUpUserId = user.Id,
+                SportUpUser = user
+            });
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return user;
+        }
     }
 }

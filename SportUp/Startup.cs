@@ -38,6 +38,7 @@ namespace SportUp
                 options.UseMySql(connectionStringBuilder.ConnectionString));
 
             services.AddScoped<SportManager>();
+            services.AddScoped<TeamManager>();
 
             services.AddDefaultIdentity<SportUpUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
