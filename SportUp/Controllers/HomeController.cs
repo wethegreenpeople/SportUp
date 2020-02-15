@@ -40,28 +40,10 @@ namespace SportUp.Controllers
 
         public async Task<IActionResult> IndexAsync()
         {
-            var viewModel = new IndexViewModel()
-            {
-                AvailableSports = await _sportManager.GetSportsAsync(),
-            };
-
-            var user = await _userManager.GetUserAsync(User);
-            if (_signInManager.IsSignedIn(User))
-                viewModel.SportsUserIsEnrolledIn = _userManager.GetEnrolledSports(user);
-
-            return View(viewModel);
+            return View();
         }
 
-        [Authorize]
-        [HttpPost]
-        public async Task<IActionResult> AddSportAsync(IndexViewModel viewModel)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            await _userManager.AddSportToUserAsync(user, new Sport());
-
-            return RedirectToAction("Index");
-        }
-
+        
         public IActionResult Privacy()
         {
             return View();

@@ -9,31 +9,9 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-action="AddSport" asp-controller="Home" method="post" name="AddSportsForm">
-        <select asp-for="SportsToEnrollUserIn" asp-items="@(new SelectList(Model.AvailableSports, "Id", "Name"))" multiple>
-            <option>Select Items</option>
-        </select>
-
-        <input type="submit" />
-    </form>
-
-    if (Model.SportsUserIsEnrolledIn?.Count > 0)
-    {
-        <h4>Sports you're enrolled in</h4>
-        <table>
-            <thead>
-                <tr>
-                    <td>Sport Name</td>
-                </tr>
-            </thead>
-            @foreach (var item in Model.SportsUserIsEnrolledIn)
-            {
-                <tr>
-                    <td>@item.Name</td>
-                </tr>
-            }
-        </table>
-    }
+    <div class="text-center">
+        <h2>Navigate to your profile to add sports!</h2>
+    </div>
 }
 else
 {
