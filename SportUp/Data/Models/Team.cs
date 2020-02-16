@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace SportUp.Data.Models
 {
+    public enum TeamPlayStyle
+    {
+        Casual,
+        Hardcore,
+        League,
+    }
+
     public class Team
     {
         [Key]
@@ -19,5 +26,8 @@ namespace SportUp.Data.Models
         
         [Required]
         public Sport TeamSportType { get; set; }
+
+        [Required]
+        public TeamPlayStyle TeamPlayStyle { get; set; }
     }
 }
