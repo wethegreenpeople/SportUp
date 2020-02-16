@@ -10,6 +10,7 @@ using SportUp.Data;
 using SportUp.Data.Models;
 using SportUp.Managers;
 using SportUp.Models.ViewModels;
+using SportUp.Views.Team.ViewModels;
 
 namespace SportUp.Controllers
 {
@@ -83,6 +84,15 @@ namespace SportUp.Controllers
                 .SingleOrDefaultAsync(s => s.Id == TeamId);
 
             return View("TeamDetails", team);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> BySport(int SportId)
+        {
+            var sport = await _sportManager.GetSportAsync(SportId);
+            var teams = await _teamManager.GetTeamsBySportAsync(sport);
+
+            return View("TeamSearchResults", new TeamSearchResultsViewModel() { Teams = teams, });
         }
     }
 }

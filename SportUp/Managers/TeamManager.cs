@@ -22,7 +22,7 @@ namespace SportUp.Managers
 
         public async Task<List<Team>> GetTeamsBySportAsync(Sport sport)
         {
-            return await _context.Teams.Where(s => s.TeamSportType == sport).ToListAsync();
+            return await _context.Teams.Include(s => s.UserTeams).Where(s => s.TeamSportType == sport).ToListAsync();
         }
 
         // TODO: Add owner column to team table

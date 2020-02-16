@@ -31,3 +31,9 @@
     <input type="submit" />
 </form>
 
+<h3>Teams By Sport</h3>
+@foreach (var sport in Model.AvailableSports)
+{
+    <a asp-action="BySport" asp-route-SportId="@sport.Id">@sport.Name </a>
+}
+
