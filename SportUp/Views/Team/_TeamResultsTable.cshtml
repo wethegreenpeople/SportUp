@@ -1,23 +1,26 @@
 ﻿@model List<Team>
 
 <table class="table">
-    <thead>
+    <thead class="thead-dark">
         <tr>
             <td>Team Name</td>
             <td>Sport</td>
             <td>Total Members</td>
-            <td>Play Style</td>
+            <td>Team Page</td>
         </tr>
     </thead>
     <tbody>
-        @foreach (var team in Model)
+        @if (Model?.Count > 0)
         {
-            <tr>
-                <td>@team.TeamName</td>
-                <td>@team.TeamSportType.Name</td>
-                <td>@team.UserTeams.Count</td>
-                <td><a asp-action="ViewTeam" asp-route-TeamId="@team.Id">Team Page</a></td>
-            </tr>
+            @foreach (var team in Model)
+            {
+                <tr>
+                    <td>@team.TeamName</td>
+                    <td>@team.TeamSportType.Name</td>
+                    <td>@team.UserTeams.Count</td>
+                    <td><a asp-action="ViewTeam" asp-route-TeamId="@team.Id">Team Page</a></td>
+                </tr>
+            }
         }
     </tbody>
 </table>

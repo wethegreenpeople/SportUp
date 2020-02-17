@@ -1,0 +1,31 @@
+﻿@model List<Team>
+
+<h1>Find A Team</h1>
+
+<div class="col d-flex justify-content-center">
+    <div class="row">
+
+        @foreach (var team in Model)
+        {
+            <a asp-action="ViewTeam" asp-controller="Team" asp-route-TeamId="@team.Id" style="text-decoration: none; color: inherit; margin-right:1rem;">
+                <div class="card bg-light mb-3" style="width: 18rem;">
+                    <img 
+                         src="@($"/images/{team.TeamSportType.Name.ToLower()}-banner.jpg")" 
+                         class="card-img-top img-fluid" 
+                         alt="basketball-team-banner"
+                         style="height:8rem;"
+                         >
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">@team.TeamName</li>
+                            <li class="list-group-item">@team.TeamSportType.Name</li>
+                            <li class="list-group-item">@team.TeamPlayStyle</li>
+                            <li class="list-group-item">@team.UserTeams.Count Member(s)</li>
+                        </ul>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>
+

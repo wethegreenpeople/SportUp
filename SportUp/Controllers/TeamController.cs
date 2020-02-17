@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LinqKit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -53,7 +54,22 @@ namespace SportUp.Controllers
         {
             var currentUser = await _userManager.GetUserAsync(User);
             var teamSport = await _sportManager.GetSportAsync(viewModel.TeamSportId);
-            await _teamManager.CreateTeamAsync(viewModel.TeamName, currentUser, teamSport);
+
+            var team = new Team()
+            {
+                TeamName = viewModel.TeamName,
+                TeamSportType = teamSport,
+                TeamPlayStyle = viewModel.PlayStyle,
+                UserTeams = new List<UserTeam>
+                {
+                    new UserTeam()
+                    {
+                        SportUpUser = currentUser,
+                    }
+                }
+            };
+
+            await _teamManager.CreateTeamAsync(team);
 
             return RedirectToAction("Index");
         }
@@ -93,6 +109,24 @@ namespace SportUp.Controllers
             var teams = await _teamManager.GetTeamsBySportAsync(sport);
 
             return View("TeamSearchResults", new TeamSearchResultsViewModel() { Teams = teams, });
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ViewAvailableTeams()
+        {
+            var predicate = PredicateBuilder.New<Team>();
+            var teams = await _teamManager.GetTeams(null);
+
+            return View("FindTeam", teams);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ViewEnrolledTeams()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var teams = _userManager.GetEnrolledTeams(user);
+            return View("JoinedTeams", teams);
         }
     }
 }

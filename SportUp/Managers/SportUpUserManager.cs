@@ -74,7 +74,8 @@ namespace SportUp.Managers
         {
             return _context.Users
                 .Include(s => s.UserTeams)
-                .ThenInclude(s => s.Team)
+                    .ThenInclude(s => s.Team)
+                        .ThenInclude(s => s.TeamSportType)
                 .SingleOrDefault(s => s.Id == user.Id)
                 .UserTeams
                 .Select(s => s.Team)

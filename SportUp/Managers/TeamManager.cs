@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LinqKit;
+using Microsoft.EntityFrameworkCore;
 using SportUp.Data;
 using SportUp.Data.Models;
 using System;
@@ -26,25 +27,31 @@ namespace SportUp.Managers
         }
 
         // TODO: Add owner column to team table
-        public async Task<Team> CreateTeamAsync(string teamName, SportUpUser teamOwner, Sport sport)
+        public async Task<Team> CreateTeamAsync(Team team)
         {
-            var team = new Team()
-            {
-                TeamName = teamName,
-                TeamSportType = sport,
-                UserTeams = new List<UserTeam>
-                {
-                    new UserTeam()
-                    {
-                        SportUpUser = teamOwner,
-                    }
-                }
-            };
-
             await _context.Teams.AddAsync(team);
             await _context.SaveChangesAsync();
 
             return team;
+        }
+
+        public async Task<List<Team>> GetTeams(ExpressionStarter<Team> predicate)
+        {
+            if (predicate == null)
+                return await _context.Teams
+                    .Include(s => s.TeamSportType)
+                    .Include(s => s.UserTeams)
+                    .OrderByDescending(s => s.Id)
+                    .Take(10)
+                    .ToListAsync();
+
+            return await _context.Teams
+                    .Include(s => s.TeamSportType)
+                    .Include(s => s.UserTeams)
+                    .Where(predicate)
+                    .OrderByDescending(s => s.Id)
+                    .Take(10)
+                    .ToListAsync();
         }
     }
 }
