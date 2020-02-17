@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SportUp.Data.Models
+namespace SportUpManagers.Data.Models
 {
     public class SportUpUser : IdentityUser
     {

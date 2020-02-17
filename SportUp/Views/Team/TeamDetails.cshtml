@@ -1,0 +1,23 @@
+﻿@model Team
+
+<h1>@Model.TeamName - @Model.TeamSportType.Name - @Model.TeamPlayStyle</h1>
+
+<h3>Members</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>Location</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.UserTeams)
+        {
+            <tr>
+                <td>@item.SportUpUser.UserName</td>
+                <td>@item.SportUpUser.Location</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

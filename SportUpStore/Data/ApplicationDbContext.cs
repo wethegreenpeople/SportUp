@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SportUp.Data.Models;
+using SportUpManagers.Data.Models;
 
-namespace SportUp.Data
+namespace SportUpManagers.Data
 {
     public class ApplicationDbContext : IdentityDbContext<SportUpUser>
     {

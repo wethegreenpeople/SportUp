@@ -1,0 +1,46 @@
+﻿@model TeamIndexViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Teams</h1>
+
+<h3>Create Team</h3>
+<form asp-action="CreateTeam" asp-controller="Team" method="post" name="CreateTeamForm">
+    <label asp-for="@Model.TeamName"></label>
+    <input asp-for="@Model.TeamName" />
+
+    <br />
+    <br />
+    <label asp-for="@Model.TeamSportId"></label>
+    <select asp-for="@Model.TeamSportId" asp-items="@(new SelectList(Model.AvailableSports, "Id", "Name"))">
+        <option>Select Sport</option>
+    </select>
+
+    <br />
+    <br />
+    <label asp-for="@Model.PlayStyle"></label>
+    <select asp-for="@Model.PlayStyle" asp-items="(Html.GetEnumSelectList<TeamPlayStyle>())">
+        <option>Select Team Style</option>
+    </select>
+
+    <input type="submit" />
+</form>
+
+<h3>Teams you're enrolled in</h3>
+<partial name="_TeamResultsTable" model="Model.CurrentlyEnrolledTeams" />
+
+<h3>Join a team</h3>
+<form asp-action="JoinTeam" asp-controller="Team" method="post" name="JoinTeamForm">
+    <label asp-for="@Model.TeamId"></label>
+    <input asp-for="@Model.TeamId" type="text" />
+
+    <input type="submit" />
+</form>
+
+<h3>Teams By Sport</h3>
+@foreach (var sport in Model.AvailableSports)
+{
+    <a asp-action="BySport" asp-route-SportId="@sport.Id">@sport.Name </a>
+}
+
