@@ -28,12 +28,10 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
+- task: PublishBuildArtifacts@1    
+  displayName: 'Publish Artifact: drop'
   inputs:
-    command: publish
-    publishWebProjects: True
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    zipAfterPublish: True
+    PathtoPublish: '$(build.artifactstagingdirectory)'
 
 - task: VSTest@2
   inputs:
