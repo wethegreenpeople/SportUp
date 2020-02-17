@@ -5,6 +5,24 @@
 
 <h1>Teams</h1>
 
+<div class="col">
+    <div class="row text-center">
+        <a asp-action="ViewAvailableTeams" asp-controller="Team" style="text-decoration: none; color: inherit;">
+            <div class="card bg-light mb-3" style="width: 18rem;">
+                <div class="card-header">
+                    <div style="font-size: 1rem;">
+                        <i class="fas fa-search fa-5x"></i>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <p class="card-text">Find a team</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
 <h3>Create Team</h3>
 <form asp-action="CreateTeam" asp-controller="Team" method="post" name="CreateTeamForm">
     <label asp-for="@Model.TeamName"></label>
