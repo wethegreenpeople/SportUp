@@ -9,8 +9,10 @@ namespace SportUp.Data.Models
     public enum TeamPlayStyle
     {
         Casual,
+        Serious,
         Hardcore,
         League,
+        Event,
     }
 
     public class Team
