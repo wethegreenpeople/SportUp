@@ -17,6 +17,13 @@
         <option>Select Sport</option>
     </select>
 
+    <br />
+    <br />
+    <label asp-for="@Model.PlayStyle"></label>
+    <select asp-for="@Model.PlayStyle" asp-items="(Html.GetEnumSelectList<TeamPlayStyle>())">
+        <option>Select Team Style</option>
+    </select>
+
     <input type="submit" />
 </form>
 
