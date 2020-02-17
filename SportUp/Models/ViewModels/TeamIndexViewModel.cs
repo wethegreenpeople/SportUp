@@ -21,5 +21,8 @@ namespace SportUp.Models.ViewModels
 
         [Display(Name = "Team ID")]
         public int TeamId { get; set; }
+
+        [Display(Name = "Team Play Style")]
+        public TeamPlayStyle PlayStyle { get; set; }
     }
 }

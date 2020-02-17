@@ -4,17 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SportUp.Data.Models
+namespace SportUpManagers.Data.Models
 {
-    public enum TeamPlayStyle
-    {
-        Casual,
-        Serious,
-        Hardcore,
-        League,
-        Event,
-    }
-
     public class Team
     {
         [Key]
@@ -28,8 +19,5 @@ namespace SportUp.Data.Models
         
         [Required]
         public Sport TeamSportType { get; set; }
-
-        [Required]
-        public TeamPlayStyle TeamPlayStyle { get; set; }
     }
 }

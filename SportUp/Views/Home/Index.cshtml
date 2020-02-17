@@ -7,37 +7,52 @@
     ViewData["Title"] = "Home Page";
 }
 
-@if (SignInManager.IsSignedIn(User))
-{
-    <form asp-action="AddSport" asp-controller="Home" method="post" name="AddSportsForm">
-        <select asp-for="SportsToEnrollUserIn" asp-items="@(new SelectList(Model.AvailableSports, "Id", "Name"))" multiple>
-            <option>Select Items</option>
-        </select>
+<div class="col d-flex justify-content-center">
+    <div class="row text-center">
+        <a asp-action="ViewAvailableTeams" asp-controller="Team" style="text-decoration: none; color: inherit;">
+            <div class="card bg-light mb-3" style="width: 18rem;">
+                <div class="card-header">
+                    <div style="font-size: 1rem;">
+                        <i class="fas fa-search fa-5x"></i>
+                    </div>
+                </div>
 
-        <input type="submit" />
-    </form>
+                <div class="card-body">
+                    <p class="card-text">Find a team</p>
+                </div>
+            </div>
+        </a>
 
-    if (Model.SportsUserIsEnrolledIn?.Count > 0)
-    {
-        <h4>Sports you're enrolled in</h4>
-        <table>
-            <thead>
-                <tr>
-                    <td>Sport Name</td>
-                </tr>
-            </thead>
-            @foreach (var item in Model.SportsUserIsEnrolledIn)
-            {
-                <tr>
-                    <td>@item.Name</td>
-                </tr>
-            }
-        </table>
-    }
-}
-else
-{
-    <div class="text-center">
-        <h2>Log in to start adding sports!</h2>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <a href="#" style="text-decoration: none; color: inherit;">
+                <div class="card bg-light mb-3" style="width: 18rem; margin-left:1rem;">
+                    <div class="card-header">
+                        <div style="font-size: 1rem;">
+                            <i class="fas fa-plus card-img-top fa-5x"></i>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <p class="card-text">Join a team</p>
+                    </div>
+                </div>
+            </a>
+
+            <a asp-action="ViewEnrolledTeams" asp-controller="Team" style="text-decoration: none; color: inherit;">
+                <div class="card bg-light mb-3" style="width: 18rem; margin-left:1rem;">
+                    <div class="card-header">
+                        <div style="font-size: 1rem;">
+                            <i class="fas fa-users fa-5x"></i>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <p class="card-text">View your teams</p>
+                    </div>
+                </div>
+            </a>
+        }
     </div>
-}
+</div>
+

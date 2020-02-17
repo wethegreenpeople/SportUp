@@ -17,29 +17,18 @@
         <option>Select Sport</option>
     </select>
 
+    <br />
+    <br />
+    <label asp-for="@Model.PlayStyle"></label>
+    <select asp-for="@Model.PlayStyle" asp-items="(Html.GetEnumSelectList<TeamPlayStyle>())">
+        <option>Select Team Style</option>
+    </select>
+
     <input type="submit" />
 </form>
 
 <h3>Teams you're enrolled in</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <td>Team Name</td>
-            <td>Sport</td>
-            <td>Total Members</td>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(var item in Model.CurrentlyEnrolledTeams)
-        {
-            <tr>
-                <td>@item.TeamName</td>
-                <td>@item.TeamSportType.Name</td>
-                <td>@item.UserTeams.Count</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<partial name="_TeamResultsTable" model="Model.CurrentlyEnrolledTeams" />
 
 <h3>Join a team</h3>
 <form asp-action="JoinTeam" asp-controller="Team" method="post" name="JoinTeamForm">
@@ -48,4 +37,10 @@
 
     <input type="submit" />
 </form>
+
+<h3>Teams By Sport</h3>
+@foreach (var sport in Model.AvailableSports)
+{
+    <a asp-action="BySport" asp-route-SportId="@sport.Id">@sport.Name </a>
+}
 
