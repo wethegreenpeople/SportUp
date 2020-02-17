@@ -47,10 +47,8 @@ namespace SportUp
 
             services.AddAuthentication().AddGoogle(options =>
             {
-                var googleAuthNSection = Configuration.GetSection("Authentication:Google");
-
-                options.ClientId = googleAuthNSection["ClientId"];
-                options.ClientSecret = googleAuthNSection["ClientSecret"];
+                options.ClientId = Configuration["ClientId"];
+                options.ClientSecret = Configuration["ClientSecret"];
             });
             services.AddControllersWithViews();
             services.AddRazorPages();
