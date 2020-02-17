@@ -33,6 +33,15 @@ steps:
   inputs:
     PathtoPublish: '$(build.artifactstagingdirectory)'
 
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'PayGo (7e90fb8f-02a8-4238-98d6-4af9ebc904d8)'
+    appType: 'webAppLinux'
+    appName: 'sportup'
+    package: '$(System.ArtifactsDirectory)/**/*.zip'
+    runtimeStack: 'DOTNETCORE|3.0'
+    startUpCommand: 'dotnet SportUp.dll'
+
 - task: VSTest@2
   inputs:
     platform: '$(buildPlatform)'
